@@ -9,9 +9,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject p2Panel;
     [SerializeField] GameObject menu;
     [SerializeField] GameObject quitMenu;
+    public static GameManager Instance;
 
-    private void Start()
+    public float playerDistance;
+
+    private void Awake()
     {
+        Instance = GetComponent<GameManager>();
+        playerDistance = Random.Range(30f, 58f);
         menu.SetActive(true);
         p1Panel.SetActive(false);
         p2Panel.SetActive(false);
