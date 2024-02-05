@@ -100,13 +100,13 @@ public class CannonController : MonoBehaviour
         if (hp <= 0)
         {
             manager.GameOver(playerName);
-            Debug.Log("Player " + playerName + " Died");
+//            Debug.Log("Player " + playerName + " Died");
         }
     }
     private float ShotDistCalc()
     {
         lastShotLength = Mathf.RoundToInt(((canonPower * canonPower) * Mathf.Sin((2 * canonAngle * Mathf.PI)/ 180)) / g);
-        Debug.Log("ShotCalc: " + lastShotLength.ToString("00.0"));
+//        Debug.Log("ShotCalc: " + lastShotLength.ToString("00.0"));
         return lastShotLength;
     }
 }

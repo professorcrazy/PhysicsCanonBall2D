@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         playerDistance = distArray[UnityEngine.Random.Range(0, distArray.Length)]; //Mathf.Round(UnityEngine.Random.Range(200f, 550f) * 10f) / 10f;
-        Debug.Log(playerDistance.ToString());
+//        Debug.Log(playerDistance.ToString());
         menu.SetActive(true);
         swapPanel.SetActive(false);
         quitMenu.SetActive(false);
