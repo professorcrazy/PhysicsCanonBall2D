@@ -11,6 +11,11 @@ public class BallShooter : MonoBehaviour
     public float angle;
 
     public CannonController controller;
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = 0;
+    }
     public void ShootBall()
     {
         angle = controller.GetCannonAngle();
@@ -22,17 +27,11 @@ public class BallShooter : MonoBehaviour
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         rb.velocity = transform.right * shotspeed;
     }
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0;
-    }
     private void Update()
     {
         if (transform.position.y < 0)
         {
-
-            Debug.Log(transform.position.x);
+            Debug.Log("Ball RB x:" + (transform.position.x*10f).ToString("00.0") + " y:" + transform.position.y.ToString());
             rb.gravityScale = 0;
             rb.velocity = Vector2.zero;
             rb.totalTorque = 0;

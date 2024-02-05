@@ -3,7 +3,9 @@ using UnityEngine.UI;
 using TMPro;
 public class CannonController : MonoBehaviour
 {
-    public string PlayerName = "Player1";
+    public string playerName = "Player 1";
+    [SerializeField] TMP_Text playerNameTxt;
+    public int playerID;
     [SerializeField] int ballWeight = 4;
     [SerializeField] TMP_Text ballWeightTxt;
     [SerializeField] Slider canonPowerSlider;
@@ -11,7 +13,7 @@ public class CannonController : MonoBehaviour
 
     [SerializeField] int hp = 3;
     [SerializeField] int maxhp = 3;
-
+    [SerializeField] TMP_Text hpTxt;
     [SerializeField] float lastShotLength = 0;
     [SerializeField] TMP_Text lastShotDistTxt;
 
@@ -24,7 +26,7 @@ public class CannonController : MonoBehaviour
     [SerializeField] float canonPower = 5f;
     [SerializeField] TMP_Text canonPowerTxt;
 
-    [SerializeField] CannonController enemyController;
+    CannonController enemyController;
     private float distanceThresshold = 0.5f;
 
     public float GetCannonAngle()
@@ -39,17 +41,23 @@ public class CannonController : MonoBehaviour
     void Start()
     {
         manager = GameManager.Instance;
+        for (int i = 0; i < manager.playerList.Count; i++)
+        {
+            if (manager.playerList[i].gameObject != this.gameObject) { 
+                enemyController = manager.playerList[i];
+                playerID = i+1;
+                playerName = "Player " + playerID.ToString();
+                playerNameTxt.text = playerName;
+                break;
+            }
+        } 
+        
         hp = maxhp;
+        hpTxt.text = hp.ToString();
         canonAngleTxt.text = canonAngle.ToString("00");
         canonPowerSlider.value = canonPower;
         canonPowerTxt.text = canonPower.ToString("00");
         ballWeightTxt.text = ballWeight.ToString();
-        foreach (CannonController c in FindObjectsOfType<CannonController>())
-        {
-            if (c != this) {
-                enemyController = c;
-            }
-        }
     }
     public void GetEnemyDistance()
     {
@@ -79,7 +87,6 @@ public class CannonController : MonoBehaviour
     }
     public void Fire()
     {
-        Debug.Log("Shoot Ball");
         manager.SwitchTurn();
         if (Mathf.Abs(ShotDistCalc() - manager.playerDistance) < distanceThresshold)
         {
@@ -89,14 +96,17 @@ public class CannonController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         hp -= damage;
+        hpTxt.text = hp.ToString();
         if (hp <= 0)
         {
-            Debug.Log("Player " + PlayerName + " Died");
+            manager.GameOver(playerName);
+            Debug.Log("Player " + playerName + " Died");
         }
     }
     private float ShotDistCalc()
     {
-        lastShotLength = ((canonPower * canonPower) * Mathf.Sin(2 * canonAngle)) / g;
+        lastShotLength = Mathf.RoundToInt(((canonPower * canonPower) * Mathf.Sin((2 * canonAngle * Mathf.PI)/ 180)) / g);
+        Debug.Log("ShotCalc: " + lastShotLength.ToString("00.0"));
         return lastShotLength;
     }
 }
